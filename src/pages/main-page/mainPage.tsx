@@ -1,9 +1,6 @@
 import React from "react";
-import { Button } from "@mui/material";
-import InputTask from "../../components/input-task/inputTask";
 import NavBar from "../../components/nav-bar/navBar";
 import { Scheduler } from "../../components/scheduler";
-import UserTasks from "../../components/user-tasks/userTasks";
 import { minWidth } from "../../constants/dimensions";
 
 const MainPage = () => {
@@ -15,16 +12,11 @@ const MainPage = () => {
           marginTop: "70px",
           marginLeft: window.innerWidth <= minWidth ? "" : "88px",
           display: "flex",
-          flexDirection: "column",
+          flexDirection: "row",
           alignItems: "center",
         }}
       >
-        <UserTasks />
-        <InputTask />
-        <Button variant="contained" style={{ width: "200px" }}>
-          Generate
-        </Button>
-        <div style={{ width: "100%" }}>
+        <div style={{ width: "80%" }}>
           <Scheduler
             view="day"
             events={[
