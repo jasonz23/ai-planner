@@ -1,4 +1,5 @@
 import React from "react";
+import AiGenerate from "../../components/ai-generate/aiGenerate";
 import NavBar from "../../components/nav-bar/navBar";
 import { Scheduler } from "../../components/scheduler";
 import { minWidth } from "../../constants/dimensions";
@@ -12,11 +13,12 @@ const MainPage = () => {
           marginTop: "70px",
           marginLeft: window.innerWidth <= minWidth ? "" : "88px",
           display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
+          flexDirection:
+            window.innerWidth >= minWidth ? "row" : "column-reverse",
+          justifyContent: "center",
         }}
       >
-        <div style={{ width: "80%" }}>
+        <div style={{ flex: 3 }}>
           <Scheduler
             view="day"
             events={[
@@ -215,6 +217,16 @@ const MainPage = () => {
             // });
             // }}
           />
+        </div>
+        <div
+          style={{
+            flex: 1,
+            height: "50vh",
+            marginTop: "36px",
+            border: "##e0e0e0 1px solid",
+          }}
+        >
+          <AiGenerate />
         </div>
       </div>
     </>
