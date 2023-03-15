@@ -77,6 +77,13 @@ const Navigation = () => {
     >
       <div data-testid="date-navigator">
         {navigation && renderDateSelector()}
+        <Button
+          onClick={() => handleState(new Date(), "selectedDate")}
+          variant="contained"
+          style={{ padding: "1px", marginLeft: "10px" }}
+        >
+          {translations.navigation.today}
+        </Button>
       </div>
 
       <div
@@ -85,9 +92,6 @@ const Navigation = () => {
           visibility: disableViewNavigator ? "hidden" : "visible",
         }}
       >
-        <Button onClick={() => handleState(new Date(), "selectedDate")}>
-          {translations.navigation.today}
-        </Button>
         {views.length > 1 &&
           (isDesktop ? (
             views.map((v) => (
