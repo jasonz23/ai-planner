@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   AppBar,
   Drawer,
@@ -83,7 +83,7 @@ const NavBar = () => {
                 : { marginLeft: "auto" }
             }
           >
-            Health Research Manager
+            Planner
           </h1>
           {window.innerWidth > minWidth && (
             <div style={{ marginLeft: "auto" }}>
