@@ -147,7 +147,11 @@ const NavBar = () => {
               style={
                 window.innerWidth > minWidth
                   ? { marginLeft: "auto" }
-                  : { display: "flex", flexDirection: "row" }
+                  : {
+                      display: "flex",
+                      flexDirection: "row",
+                      marginLeft: "auto",
+                    }
               }
             >
               <Button
@@ -155,7 +159,7 @@ const NavBar = () => {
                 style={{
                   color: "#ffff",
                   border: "1px solid white",
-                  marginRight: "50px",
+                  marginRight: window.innerWidth > minWidth ? "50px" : "25px",
                 }}
                 onClick={() => {
                   signOut();
@@ -169,7 +173,11 @@ const NavBar = () => {
               style={
                 window.innerWidth > minWidth
                   ? { marginLeft: "auto" }
-                  : { display: "flex", flexDirection: "row" }
+                  : {
+                      display: "flex",
+                      flexDirection: "row",
+                      marginLeft: "auto",
+                    }
               }
             >
               <Button
@@ -192,7 +200,7 @@ const NavBar = () => {
                 style={{
                   color: "#ffff",
                   border: "1px solid white",
-                  marginRight: window.innerWidth > minWidth ? "50px" : "",
+                  marginRight: window.innerWidth > minWidth ? "50px" : "25px",
                   fontSize: window.innerWidth > minWidth ? "" : "10px",
                 }}
                 onClick={() => {
