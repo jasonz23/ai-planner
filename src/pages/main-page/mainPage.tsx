@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import AiGenerate from "../../components/ai-generate/aiGenerate";
 import NavBar from "../../components/nav-bar/navBar";
 import { Scheduler } from "../../components/scheduler";
@@ -7,12 +7,13 @@ import { auth, db } from "../App";
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   getDocs,
   updateDoc,
 } from "firebase/firestore";
 import { useAppDispatch, useAppSelector } from "../../slices";
-import { setTasks } from "../../slices/tasks";
+import { deleteTask, setTasks } from "../../slices/tasks";
 import { addTask } from "../../slices/tasks";
 import { setUser } from "../../slices/user";
 const MainPage = () => {
@@ -24,7 +25,6 @@ const MainPage = () => {
     await getDocs(collection(db, "events"))
       .then((querySnapshot) => {
         querySnapshot.docs.forEach((data) => {
-          console.log(data.data());
           if (data.data()?.uid === auth.currentUser?.uid) {
             const task = {
               event_id: data.data().event_id,
@@ -69,7 +69,7 @@ const MainPage = () => {
               day={{ startHour: 0, endHour: 23, step: 60 }}
               onConfirm={async (event, action) => {
                 console.log(event);
-                const task = {
+                const task: any = {
                   event_id: event.event_id || Math.random(),
                   start: event.start,
                   end: event.end,
@@ -83,6 +83,7 @@ const MainPage = () => {
                       task.doc_id = docRef.id;
                       updateDoc(doc(db, "events", docRef.id), task);
                       dispatch(addTask(task));
+                      console.log("task", tasks);
                       return task;
                     }
                   );
@@ -102,13 +103,21 @@ const MainPage = () => {
                 }
               }}
               onDelete={async (id) => {
-                return new Promise((res, rej) => {
-                  setTimeout(() => {
-                    // setEvents((prev) => {
-                    //   return prev.filter((p) => p.event_id !== id);
-                    // });
-                    res(id);
-                  }, 1000);
+                let doc_id = "";
+                console.log(id);
+                console.log(tasks);
+                tasks.forEach((task) => {
+                  console.log(task);
+                  if (task.event_id === id) {
+                    doc_id = task.doc_id.replace(" ", "");
+                    console.log(doc_id);
+                  }
+                });
+                console.log(doc_id);
+                return deleteDoc(doc(db, "events", doc_id)).then(() => {
+                  console.log(id);
+                  dispatch(deleteTask({ event_id: id }));
+                  return id;
                 });
               }}
               timeZone="America/Los_Angeles"
@@ -130,6 +139,10 @@ const MainPage = () => {
                 // cellRenderer: () => {
                 //   return <h1>month</h1>;
                 // },
+              }}
+              eventRenderer={(event) => {
+                console.log(tasks);
+                return null;
               }}
               // getRemoteEvents={async (query) => {
               //   console.log(query);
