@@ -37,7 +37,7 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: window.innerWidth > minWidth ? 400 : "98%",
   bgcolor: "white",
   border: "2px solid #000",
   boxShadow: 24,
@@ -142,53 +142,67 @@ const NavBar = () => {
           >
             Planner
           </h1>
-          {window.innerWidth > minWidth &&
-            (auth.currentUser ? (
-              <div style={{ marginLeft: "auto" }}>
-                <Button
-                  variant="outlined"
-                  style={{
-                    color: "#ffff",
-                    border: "1px solid white",
-                    marginRight: "50px",
-                  }}
-                  onClick={() => {
-                    signOut();
-                  }}
-                >
-                  Sign Out
-                </Button>
-              </div>
-            ) : (
-              <div style={{ marginLeft: "auto" }}>
-                <Button
-                  variant="outlined"
-                  style={{
-                    color: "#ffff",
-                    border: "1px solid white",
-                    marginRight: "20px",
-                  }}
-                  onClick={() => {
-                    setShowModal({ show: true, option: 0 });
-                  }}
-                >
-                  Sign In
-                </Button>
-                <Button
-                  variant="outlined"
-                  style={{
-                    color: "#ffff",
-                    border: "1px solid white",
-                    marginRight: "50px",
-                  }}
-                  onClick={() => {
-                    setShowModal({ show: true, option: 1 });
-                  }}
-                >
-                  Sign Up
-                </Button>
-              </div>
-            ))}
+          {auth.currentUser ? (
+            <div
+              style={
+                window.innerWidth > minWidth
+                  ? { marginLeft: "auto" }
+                  : { display: "flex", flexDirection: "row" }
+              }
+            >
+              <Button
+                variant="outlined"
+                style={{
+                  color: "#ffff",
+                  border: "1px solid white",
+                  marginRight: "50px",
+                }}
+                onClick={() => {
+                  signOut();
+                }}
+              >
+                Sign Out
+              </Button>
+            </div>
+          ) : (
+            <div
+              style={
+                window.innerWidth > minWidth
+                  ? { marginLeft: "auto" }
+                  : { display: "flex", flexDirection: "row" }
+              }
+            >
+              <Button
+                variant="outlined"
+                style={{
+                  color: "#ffff",
+                  border: "1px solid white",
+                  marginLeft: window.innerWidth > minWidth ? "" : "20px",
+                  marginRight: window.innerWidth > minWidth ? "20px" : "auto",
+                  fontSize: window.innerWidth > minWidth ? "" : "10px",
+                }}
+                onClick={() => {
+                  setShowModal({ show: true, option: 0 });
+                }}
+              >
+                Sign In
+              </Button>
+              <Button
+                variant="outlined"
+                style={{
+                  color: "#ffff",
+                  border: "1px solid white",
+                  marginRight: window.innerWidth > minWidth ? "50px" : "",
+                  fontSize: window.innerWidth > minWidth ? "" : "10px",
+                }}
+                onClick={() => {
+                  setShowModal({ show: true, option: 1 });
+                }}
+              >
+                Sign Up
+              </Button>
+            </div>
+          )}
         </Toolbar>
       </AppBar>
 
