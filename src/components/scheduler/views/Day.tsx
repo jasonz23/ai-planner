@@ -15,7 +15,12 @@ import {
 } from "date-fns";
 import TodayTypo from "../components/common/TodayTypo";
 import EventItem from "../components/events/EventItem";
-import { CellRenderedProps, DayHours, DefaultRecourse, ProcessedEvent } from "../types";
+import {
+  CellRenderedProps,
+  DayHours,
+  DefaultRecourse,
+  ProcessedEvent,
+} from "../types";
 import {
   calcCellHeight,
   calcMinuteHeight,
@@ -71,7 +76,8 @@ const Day = () => {
   const CELL_HEIGHT = calcCellHeight(height, hours.length);
   const MINUTE_HEIGHT = calcMinuteHeight(CELL_HEIGHT, step);
   const hFormat = hourFormat === "12" ? "hh:mm a" : "HH:mm";
-  const todayEvents = events.sort((b, a) => a.end.getTime() - b.end.getTime());
+  //const todayEvents = events.sort((b, a) => a.end.getTime() - b.end.getTime());
+  const todayEvents = events;
   const { headersRef, bodyRef } = useSyncScroll();
 
   const fetchEvents = useCallback(async () => {
@@ -104,7 +110,10 @@ const Day = () => {
   const renderMultiDayEvents = (multiDays: ProcessedEvent[]) => {
     const todayMulti = filterMultiDaySlot(multiDays, selectedDate, timeZone);
     return (
-      <div className="rs__block_col" style={{ height: MULTI_DAY_EVENT_HEIGHT * multiDays.length }}>
+      <div
+        className="rs__block_col"
+        style={{ height: MULTI_DAY_EVENT_HEIGHT * multiDays.length }}
+      >
         {todayMulti.map((event, i) => {
           const hasPrev = isBefore(event.start, startOfDay(selectedDate));
           const hasNext = isAfter(event.end, endOfDay(selectedDate));
@@ -117,7 +126,12 @@ const Day = () => {
                 width: "100%",
               }}
             >
-              <EventItem event={event} multiday hasPrev={hasPrev} hasNext={hasNext} />
+              <EventItem
+                event={event}
+                multiday
+                hasPrev={hasPrev}
+                hasNext={hasNext}
+              />
             </div>
           );
         })}
@@ -128,7 +142,12 @@ const Day = () => {
   const renderTable = (resource?: DefaultRecourse) => {
     let recousedEvents = todayEvents;
     if (resource) {
-      recousedEvents = getResourcedEvents(todayEvents, resource, resourceFields, fields);
+      recousedEvents = getResourcedEvents(
+        todayEvents,
+        resource,
+        resourceFields,
+        fields
+      );
     }
 
     // Equalizing multi-day section height
@@ -145,7 +164,9 @@ const Day = () => {
         <TableGrid days={1} ref={headersRef} sticky="1">
           <span className="rs__cell"></span>
           <span
-            className={`rs__cell rs__header ${isToday(selectedDate) ? "rs__today_cell" : ""}`}
+            className={`rs__cell rs__header ${
+              isToday(selectedDate) ? "rs__today_cell" : ""
+            }`}
             style={{ height: headerHeight }}
           >
             <TodayTypo date={selectedDate} locale={locale} />
@@ -155,24 +176,42 @@ const Day = () => {
         <TableGrid days={1} ref={bodyRef}>
           {/* Body */}
           {hours.map((h, i) => {
-            const start = new Date(`${format(selectedDate, "yyyy/MM/dd")} ${format(h, hFormat)}`);
+            const start = new Date(
+              `${format(selectedDate, "yyyy/MM/dd")} ${format(h, hFormat)}`
+            );
             const end = new Date(
-              `${format(selectedDate, "yyyy/MM/dd")} ${format(addMinutes(h, step), hFormat)}`
+              `${format(selectedDate, "yyyy/MM/dd")} ${format(
+                addMinutes(h, step),
+                hFormat
+              )}`
             );
             const field = resourceFields.idField;
 
             return (
               <Fragment key={i}>
                 {/* Time Cells */}
-                <span className="rs__cell rs__header rs__time" style={{ height: CELL_HEIGHT }}>
-                  <Typography variant="caption">{format(h, hFormat, { locale })}</Typography>
+                <span
+                  className="rs__cell rs__header rs__time"
+                  style={{ height: CELL_HEIGHT }}
+                >
+                  <Typography variant="caption">
+                    {format(h, hFormat, { locale })}
+                  </Typography>
                 </span>
 
-                <span className={`rs__cell ${isToday(selectedDate) ? "rs__today_cell" : ""}`}>
+                <span
+                  className={`rs__cell ${
+                    isToday(selectedDate) ? "rs__today_cell" : ""
+                  }`}
+                >
                   {/* Events of this day - run once on the top hour column */}
                   {i === 0 && (
                     <TodayEvents
-                      todayEvents={filterTodayEvents(recousedEvents, selectedDate, timeZone)}
+                      todayEvents={filterTodayEvents(
+                        recousedEvents,
+                        selectedDate,
+                        timeZone
+                      )}
                       today={START_TIME}
                       minuteHeight={MINUTE_HEIGHT}
                       startHour={startHour}
@@ -199,7 +238,11 @@ const Day = () => {
     );
   };
 
-  return resources.length ? <WithResources span={2} renderChildren={renderTable} /> : renderTable();
+  return resources.length ? (
+    <WithResources span={2} renderChildren={renderTable} />
+  ) : (
+    renderTable()
+  );
 };
 
 export { Day };
