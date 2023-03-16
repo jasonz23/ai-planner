@@ -4,7 +4,8 @@ import NavBar from "../../components/nav-bar/navBar";
 const SettingsPage = () => {
   return (
     <div>
-      <NavBar></NavBar>
+      <NavBar />
+      <div>To be Added</div>
     </div>
   );
 };

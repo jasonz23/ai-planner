@@ -16,6 +16,7 @@ import { useAppDispatch, useAppSelector } from "../../slices";
 import { deleteTask, setTasks } from "../../slices/tasks";
 import { addTask } from "../../slices/tasks";
 import { setUser } from "../../slices/user";
+import LoadingIcon from "../../components/loading-icon/loadingIcon";
 const MainPage = () => {
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(true);
@@ -342,8 +343,33 @@ const MainPage = () => {
                 // }}
               />
             </div>
+          ) : window.innerWidth > minWidth ? (
+            <div style={{ flex: 3 }}>
+              <div
+                style={{
+                  backgroundColor: "white",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginTop: "36px",
+                  filter: "blur(1.5rem)",
+                  height: "100vh",
+                  width: "100%",
+                }}
+              ></div>
+              <div
+                style={{
+                  position: "absolute",
+                  zIndex: "1000",
+                  top: "30%",
+                  left: "30%",
+                }}
+              >
+                <LoadingIcon />
+              </div>
+            </div>
           ) : (
-            <div style={{ flex: 3 }}></div>
+            <div></div>
           )}
           <div
             style={{
