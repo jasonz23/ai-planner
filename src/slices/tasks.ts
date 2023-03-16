@@ -28,9 +28,16 @@ const slice = createSlice({
                 state.tasks.push(payload);
             }
         },
+        deleteTask: (state, {payload}: PayloadAction<any>) => {
+            state.tasks.forEach((task, index) => {
+                if (task.event_id === payload.event_id) {
+                    state.tasks.splice(index,1);
+                }
+            })
+        },
     }
 })
 
-export const {setTasks, addTask} = slice.actions;
+export const {setTasks, addTask, deleteTask} = slice.actions;
 
 export const tasks = slice.reducer;
