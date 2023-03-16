@@ -64,7 +64,7 @@ const MainPage = () => {
           tasks.length != 0) && (
           <div style={{ flex: 3 }}>
             <Scheduler
-              view="week"
+              view={window.innerWidth > minWidth ? "week" : "day"}
               events={tasks}
               day={{ startHour: 0, endHour: 23, step: 60 }}
               onConfirm={async (event, action) => {
