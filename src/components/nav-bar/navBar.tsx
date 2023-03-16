@@ -364,6 +364,7 @@ const NavBar = () => {
               fullWidth
               style={{ marginTop: "16px" }}
               id="password"
+              type="password"
             />
             <Button
               variant="contained"
