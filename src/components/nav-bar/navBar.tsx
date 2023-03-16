@@ -28,6 +28,13 @@ const NavBar = () => {
     link4: "Settings",
   };
 
+  const NAVIGATE = {
+    link1: "/",
+    link2: "/tasks",
+    link3: "/calendar",
+    link4: "/settings",
+  };
+
   const navigate = useNavigate();
   const [showDrawer, setShowDrawer] = useState(false);
 
@@ -111,23 +118,38 @@ const NavBar = () => {
           <div>
             <List
               style={{
-                height: "90vh",
+                height: "85vh",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "flex-start",
               }}
             >
-              <ListItemButton key={CONTENTS["link1"]}>
+              <ListItemButton
+                key={CONTENTS["link1"]}
+                onClick={() => {
+                  navigate(NAVIGATE["link1"]);
+                }}
+              >
                 <ListItemIcon className="icon-box">
                   <HomeIcon style={{ fontSize: "35px" }} />
                 </ListItemIcon>
               </ListItemButton>
-              <ListItemButton key={CONTENTS["link2"]}>
+              <ListItemButton
+                key={CONTENTS["link2"]}
+                onClick={() => {
+                  navigate(NAVIGATE["link2"]);
+                }}
+              >
                 <ListItemIcon className="icon-box">
                   <ListAltIcon style={{ fontSize: "35px" }} />
                 </ListItemIcon>
               </ListItemButton>
-              <ListItemButton key={CONTENTS["link3"]}>
+              <ListItemButton
+                key={CONTENTS["link3"]}
+                onClick={() => {
+                  navigate(NAVIGATE["link3"]);
+                }}
+              >
                 <ListItemIcon className="icon-box">
                   <CalendarMonthIcon style={{ fontSize: "35px" }} />
                 </ListItemIcon>
@@ -136,6 +158,9 @@ const NavBar = () => {
               <ListItemButton
                 key={CONTENTS["link4"]}
                 style={{ marginTop: "auto" }}
+                onClick={() => {
+                  navigate(NAVIGATE["link4"]);
+                }}
               >
                 <ListItemIcon className="icon-box">
                   <SettingsIcon style={{ fontSize: "35px" }} />
@@ -182,19 +207,37 @@ const NavBar = () => {
               justifyContent: "flex-start",
             }}
           >
-            <ListItemButton key={CONTENTS["link1"]}>
+            <ListItemButton
+              key={CONTENTS["link1"]}
+              onClick={() => {
+                navigate(NAVIGATE["link1"]);
+              }}
+            >
               <ListItemIcon className="icon-box">
                 <HomeIcon style={{ fontSize: "35px" }} />
+                <div style={{ margin: "auto" }}>Home</div>
               </ListItemIcon>
             </ListItemButton>
-            <ListItemButton key={CONTENTS["link2"]}>
+            <ListItemButton
+              key={CONTENTS["link2"]}
+              onClick={() => {
+                navigate(NAVIGATE["link2"]);
+              }}
+            >
               <ListItemIcon className="icon-box">
                 <ListAltIcon style={{ fontSize: "35px" }} />
+                <div>Tasks</div>
               </ListItemIcon>
             </ListItemButton>
-            <ListItemButton key={CONTENTS["link3"]}>
+            <ListItemButton
+              key={CONTENTS["link3"]}
+              onClick={() => {
+                navigate(NAVIGATE["link3"]);
+              }}
+            >
               <ListItemIcon className="icon-box">
                 <CalendarMonthIcon style={{ fontSize: "35px" }} />
+                <div>Calendar</div>
               </ListItemIcon>
             </ListItemButton>
             <Divider />
@@ -202,11 +245,12 @@ const NavBar = () => {
               key={CONTENTS["link4"]}
               style={{ marginTop: "auto" }}
               onClick={() => {
-                navigate("/settings");
+                navigate(NAVIGATE["link4"]);
               }}
             >
               <ListItemIcon className="icon-box">
                 <SettingsIcon style={{ fontSize: "35px" }} />
+                <div>Settings</div>
               </ListItemIcon>
             </ListItemButton>
           </List>
