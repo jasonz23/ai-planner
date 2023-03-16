@@ -9,6 +9,9 @@ import {
   Button,
   IconButton,
   ListItemButton,
+  Modal,
+  Box,
+  TextField,
 } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import ListAltIcon from "@mui/icons-material/ListAlt";
@@ -19,6 +22,27 @@ import CloseIcon from "@mui/icons-material/Close";
 import "./nav-bar.css";
 import { useNavigate } from "react-router-dom";
 import { minWidth } from "../../constants/dimensions";
+import { auth } from "../../pages/App";
+import {
+  signOut as signOutFireBase,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { useAppDispatch } from "../../slices";
+import { setUser } from "../../slices/user";
+import { setTasks } from "../../slices/tasks";
+
+const style = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "white",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
 const NavBar = () => {
   const CONTENTS = {
@@ -34,16 +58,42 @@ const NavBar = () => {
     link3: "/calendar",
     link4: "/settings",
   };
+  const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
   const [showDrawer, setShowDrawer] = useState(false);
+  const [showModal, setShowModal] = useState({ show: false, option: 0 });
 
   const signOut = () => {
-    //   const auth = getAuth();
-    //   signOutFireBase(auth).then(() => {
-    //     console.log("signed out");
-    //     navigate("/sign-in");
-    //   });
+    signOutFireBase(auth).then(() => {
+      console.log("sign out");
+      dispatch(setTasks([]));
+      dispatch(setUser({}));
+    });
+  };
+  const signIn = async () => {
+    const email = (document.getElementById("email") as HTMLInputElement).value;
+    const password = (document.getElementById("password") as HTMLInputElement)
+      .value;
+    await signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        //setShowModal({ show: false, option: 0 });
+        dispatch(setUser(userCredential));
+        window.location.reload();
+      })
+      .catch();
+  };
+  const signUp = async () => {
+    const email = (document.getElementById("email") as HTMLInputElement).value;
+    const password = (document.getElementById("password") as HTMLInputElement)
+      .value;
+    await createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        //setShowModal({ show: false, option: 0 });
+        dispatch(setUser(userCredential));
+        window.location.reload();
+      })
+      .catch();
   };
 
   return (
@@ -92,23 +142,53 @@ const NavBar = () => {
           >
             Planner
           </h1>
-          {window.innerWidth > minWidth && (
-            <div style={{ marginLeft: "auto" }}>
-              <Button
-                variant="outlined"
-                style={{
-                  color: "#ffff",
-                  border: "1px solid white",
-                  marginRight: "50px",
-                }}
-                onClick={() => {
-                  signOut();
-                }}
-              >
-                Sign Out
-              </Button>
-            </div>
-          )}
+          {window.innerWidth > minWidth &&
+            (auth.currentUser ? (
+              <div style={{ marginLeft: "auto" }}>
+                <Button
+                  variant="outlined"
+                  style={{
+                    color: "#ffff",
+                    border: "1px solid white",
+                    marginRight: "50px",
+                  }}
+                  onClick={() => {
+                    signOut();
+                  }}
+                >
+                  Sign Out
+                </Button>
+              </div>
+            ) : (
+              <div style={{ marginLeft: "auto" }}>
+                <Button
+                  variant="outlined"
+                  style={{
+                    color: "#ffff",
+                    border: "1px solid white",
+                    marginRight: "20px",
+                  }}
+                  onClick={() => {
+                    setShowModal({ show: true, option: 0 });
+                  }}
+                >
+                  Sign In
+                </Button>
+                <Button
+                  variant="outlined"
+                  style={{
+                    color: "#ffff",
+                    border: "1px solid white",
+                    marginRight: "50px",
+                  }}
+                  onClick={() => {
+                    setShowModal({ show: true, option: 1 });
+                  }}
+                >
+                  Sign Up
+                </Button>
+              </div>
+            ))}
         </Toolbar>
       </AppBar>
 
@@ -256,6 +336,51 @@ const NavBar = () => {
           </List>
         </div>
       </Drawer>
+      <Modal
+        open={showModal.show}
+        onClose={() => {
+          setShowModal({ show: false, option: 0 });
+        }}
+      >
+        <Box sx={style}>
+          <div style={{ fontSize: "30px", fontWeight: "bold" }}>
+            {showModal.option === 0 ? "Sign In" : "Sign Up"}
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <TextField
+              label="Email"
+              fullWidth
+              style={{ marginTop: "16px" }}
+              id="email"
+            />
+            <TextField
+              label="Password"
+              fullWidth
+              style={{ marginTop: "16px" }}
+              id="password"
+            />
+            <Button
+              variant="contained"
+              style={{ marginTop: "16px" }}
+              onClick={() => {
+                if (showModal.option === 0) {
+                  signIn();
+                } else {
+                  signUp();
+                }
+              }}
+            >
+              {showModal.option === 0 ? "Sign In" : "Sign Up"}
+            </Button>
+          </div>
+        </Box>
+      </Modal>
     </div>
   );
 };
