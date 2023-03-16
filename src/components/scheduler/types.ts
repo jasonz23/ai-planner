@@ -56,6 +56,8 @@ interface CalendarEvent {
   deletable?: boolean;
   draggable?: boolean;
   allDay?: boolean;
+  doc_id?: any;
+  uid?: any;
 }
 export interface Translations {
   navigation: Record<View, string> & { today: string };
@@ -198,9 +200,9 @@ export interface SchedulerProps {
   /**Table loading state */
   loading?: boolean;
   /**Async function triggered when add/edit event */
-  onConfirm?(event: ProcessedEvent, action: EventActions): Promise<ProcessedEvent>;
+  onConfirm?(event: ProcessedEvent, action: EventActions): any;
   /**Async function triggered when delete event */
-  onDelete?(deletedId: string | number): Promise<string | number | void>;
+  onDelete?(deletedId: string | number): any;
   /**Override editor modal */
   customEditor?(scheduler: SchedulerHelpers): JSX.Element;
   /**Additional component in event viewer popper */
