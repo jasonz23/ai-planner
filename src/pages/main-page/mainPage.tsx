@@ -222,7 +222,7 @@ const MainPage = () => {
           style={{
             flex: 1,
             height: "50vh",
-            marginTop: "36px",
+            marginTop: window.innerWidth >= minWidth ? "36px" : "",
             border: "##e0e0e0 1px solid",
           }}
         >
