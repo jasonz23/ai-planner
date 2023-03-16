@@ -186,7 +186,7 @@ const NavBar = () => {
                   color: "#ffff",
                   border: "1px solid white",
                   marginLeft: window.innerWidth > minWidth ? "" : "20px",
-                  marginRight: window.innerWidth > minWidth ? "20px" : "auto",
+                  marginRight: window.innerWidth > minWidth ? "20px" : "5px",
                   fontSize: window.innerWidth > minWidth ? "" : "10px",
                 }}
                 onClick={() => {
