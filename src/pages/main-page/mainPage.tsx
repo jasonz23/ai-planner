@@ -68,17 +68,16 @@ const MainPage = () => {
           isLoading ? (
             <div style={{ flex: 3 }}>
               <Scheduler
-                view={window.innerWidth > minWidth ? "week" : "day"}
+                view="day"
                 events={tasks}
                 day={{ startHour: 0, endHour: 23, step: 60 }}
                 onConfirm={async (event, action) => {
-                  console.log(event);
                   if (action === "create") {
                     setIsLoading(false);
                   }
 
                   const task: any = {
-                    event_id: event.event_id || Math.random(),
+                    event_id: event?.event_id || Math.random(),
                     start: event.start,
                     end: event.end,
                     title: event.title,
@@ -91,7 +90,6 @@ const MainPage = () => {
                         task.doc_id = docRef.id;
                         updateDoc(doc(db, "events", docRef.id), task);
                         dispatch(addTask(task));
-                        console.log("task", tasks);
                         setIsLoading(true);
                         return task;
                       }
@@ -103,7 +101,6 @@ const MainPage = () => {
                         doc_id = task.doc_id.replace(" ", "");
                       }
                     });
-                    console.log(doc_id);
                     task.doc_id = doc_id;
                     return updateDoc(doc(db, "events", doc_id), task).then(
                       () => {
@@ -115,18 +112,12 @@ const MainPage = () => {
                 }}
                 onDelete={async (id) => {
                   let doc_id = "";
-                  console.log(id);
-                  console.log(tasks);
                   tasks.forEach((task) => {
-                    console.log(task);
                     if (task.event_id === id) {
                       doc_id = task.doc_id.replace(" ", "");
-                      console.log(doc_id);
                     }
                   });
-                  console.log(doc_id);
                   return deleteDoc(doc(db, "events", doc_id)).then(() => {
-                    console.log(id);
                     dispatch(deleteTask({ event_id: id }));
                     return id;
                   });
@@ -152,7 +143,6 @@ const MainPage = () => {
                   // },
                 }}
                 eventRenderer={(event) => {
-                  console.log(tasks);
                   return null;
                 }}
                 // getRemoteEvents={async (query) => {
@@ -343,7 +333,7 @@ const MainPage = () => {
                 // }}
               />
             </div>
-          ) : window.innerWidth > minWidth ? (
+          ) : (
             <div style={{ flex: 3 }}>
               <div
                 style={{
@@ -368,8 +358,6 @@ const MainPage = () => {
                 <LoadingIcon />
               </div>
             </div>
-          ) : (
-            <div></div>
           )}
           <div
             style={{
@@ -379,7 +367,11 @@ const MainPage = () => {
               border: "##e0e0e0 1px solid",
             }}
           >
-            <AiGenerate />
+            <AiGenerate
+              setIsLoading={(a: boolean) => {
+                setIsLoading(a);
+              }}
+            />
           </div>
         </div>
       }
