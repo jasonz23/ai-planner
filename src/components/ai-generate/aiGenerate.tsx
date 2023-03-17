@@ -8,8 +8,19 @@ import {
   TextField,
 } from "@mui/material";
 import React, { useState } from "react";
+import { generateTasks } from "../../api/tasks";
+import { auth } from "../../pages/App";
+import { useAppDispatch, useAppSelector } from "../../slices";
 const AiGenerate = () => {
   const [time, setTime] = useState("");
+  const TIMEPERIOD: any = {
+    "": "1 Day",
+    "0": "1 Day",
+    "1": "3 Day",
+    "2": "1 Week",
+  };
+  const tasks = useAppSelector((state) => state?.tasks?.tasks);
+  const dispatch = useAppDispatch();
   return (
     <div
       style={{
@@ -24,10 +35,10 @@ const AiGenerate = () => {
         Generate Planner
       </div>
       <div style={{ margin: "10px", width: "80%" }}>
-        <TextField label="Wake Up Time" fullWidth />
+        <TextField label="Wake Up Time" fullWidth id="wake-up-time" />
       </div>
       <div style={{ margin: "10px", width: "80%" }}>
-        <TextField label="Sleep Time" fullWidth />
+        <TextField label="Sleep Time" fullWidth id="sleep-time" />
       </div>
 
       {/* TODO: <div style={{ margin: "10px" }}>Transport Time?</div> */}
@@ -50,14 +61,32 @@ const AiGenerate = () => {
             }}
           >
             <MenuItem value={0}>1 Day</MenuItem>
-            <MenuItem value={1}>3 Day</MenuItem>
-            <MenuItem value={2}>1 Week</MenuItem>
+            <MenuItem value={1} disabled>
+              3 Day
+            </MenuItem>
+            <MenuItem value={2} disabled>
+              1 Week
+            </MenuItem>
           </Select>
         </FormControl>
       </div>
       <Button
         variant="contained"
         style={{ margin: "10px", marginBottom: "20px" }}
+        onClick={() => {
+          dispatch(
+            generateTasks({
+              wakeUp: (
+                document.getElementById("wake-up-time") as HTMLInputElement
+              ).value,
+              sleep: (document.getElementById("sleep-time") as HTMLInputElement)
+                .value,
+              time: TIMEPERIOD[time],
+              tasks: tasks,
+              uid: auth.currentUser?.uid,
+            })
+          );
+        }}
       >
         Generate
       </Button>
