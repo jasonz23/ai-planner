@@ -2,6 +2,7 @@ import { AnyAction, ThunkAction } from "@reduxjs/toolkit";
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { db } from "../pages/App";
 import { RootState } from "../slices";
+import { addTaskUnique } from "../slices/tasks";
 
 const { Configuration, OpenAIApi } = require("openai");
 
@@ -13,22 +14,22 @@ const openai = new OpenAIApi(configuration);
 export const generateTasks = (info: any): ThunkAction<void, RootState, unknown, AnyAction> => async (dispatch) => {
     console.log("click");
     const messages: any[] = [];
-
+    const today = new Date();
     
     let prompt: string = `I have a list of javascript objects which are events in my personal schedule.`;
     info.tasks.forEach((task: any) => {
-        prompt += `I have ${task.title} event starting at ${task.start} and ends at ${task.end} as well as an event_id of ${task.event_id}.`
+        if (task.end.getDate() == today.getDate() && task.end.getMonth() == today.getMonth() && task.end.getFullYear() == today.getFullYear()) {
+            prompt += `I have ${task.title} event starting at ${task.start} and ends at ${task.end} as well as an event_id of ${task.event_id}.`;
+        }
     })
     console.log(prompt)
     //messages.push({role: "system", content: "you are a personal assistant"})
     messages.push({role: "user", content: prompt});
     //Return the events as a list of objects with event_id field which is a unique id for the event, title field which is the name of the event, start field which is when the event starts, end field which is when the event ends and uid which will equal ${info.uid}
-    const a  = `Considering that I wake up at ${info.wakeUp} and sleep at ${info.sleep}. Give me times in UTC-7 where I can study or take breaks so I can optimize the amount I can study. I want to take a 10 minute break for every 40 minutes I study. Also make time for breakfest, lunch and dinner. Make sure to not overlap studying and break time with the events I have included."`;
+    const a  = `Considering that I wake up at ${info.wakeUp} and sleep at ${info.sleep}. Give me times in UTC-7 where I can study or take breaks so I can optimize the amount I can study from when I wake up to when I sleep. I want to take a 10 minute break for every 40 minutes I study. Also make time for breakfest, lunch and dinner. Make sure to not overlap studying and break time with the events I have included (if they exist). Give me at least 10 events of studying or breaks. Format the times as a list of json objects where event_id field is a unique id for the event, title field is the name of the event, start field is the start time of the event in UTC-7, end field is the end time of the event in UTC-7 and uid field is ${info.uid}. The uid field is the same for all events/ times and is equal to ${info.uid}.`;
     messages.push({role: "user", content: a});
-    messages.push({role:"user", content:`Format the times as a list of json objects where event_id field is a unique id for the event, title field is the name of the event, start field is the start time of the event in UTC-7, end field is the end time of the event in UTC-7 and uid field is ${info.uid}.`})
-    messages.push({role:"user", content: "only return the list and no other text and do not include new lines or \n. Only return the times and do not include the events I included in my prompt. Do not give any text other than the list."})
+    messages.push({role:"user", content: "only return the list and no other text and do not include new lines or \n. Only return the times and do not include the events I included in my prompt. Do not give any text other than the list. Return the full list."})
     //messages.push({role:"user", content:`format your answer as a list of json objects where event_id field is a unique id for the event, title field is the name of the event, start field is the start of the event, end field is the end of the event and uid field is ${info.uid}.`})
-
     const response = await openai.createChatCompletion({
         model: "gpt-3.5-turbo",
         messages: messages,
@@ -45,23 +46,30 @@ export const generateTasks = (info: any): ThunkAction<void, RootState, unknown, 
     res = res.slice(0, end + 1);
     const tasks = JSON.parse(response.data.choices[0].message.content);
     console.log(tasks);
-    tasks.forEach((task: any) => {
-        console.log(task);
+    tasks.forEach(async (task: any) => {
+        
         const formattedTask = {
-            event_id: task.event_id,
+            event_id: Math.random(),
             start: new Date(task.start),
             end: new Date(task.end),
             title: task.title,
-            uid: task.uid,
+            uid: info.uid,
             doc_id: "",
-          };
+        };
+        console.log(formattedTask);
         addDoc(collection(db, "events"), formattedTask).then(
             (docRef) => {
-            formattedTask.doc_id = docRef.id;
-              updateDoc(doc(db, "events", docRef.id), formattedTask);
-              return formattedTask;
+                console.log("hit")
+                formattedTask.doc_id = docRef.id;
+                updateDoc(doc(db, "events", docRef.id), formattedTask);
+                dispatch(addTaskUnique(formattedTask));
             }
-          );
+        );
+    info.callBack(true);
+    setTimeout(() => {
+        window.location.reload()
+    },700)
+        
     })
     //window.location.reload();
 };
