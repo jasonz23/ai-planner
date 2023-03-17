@@ -4,7 +4,7 @@ const tasksPage = () => {
   return (
     <div>
       <NavBar />
-      <div>To be Added</div>
+      <div>Under Development</div>
     </div>
   );
 };
