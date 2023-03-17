@@ -15,7 +15,7 @@ const CalendarPage = () => {
           marginLeft: window.innerWidth <= minWidth ? "" : "88px",
         }}
       >
-        <Scheduler events={tasks} view="month" />
+        <Scheduler events={tasks} view="month" editable={false} />
       </div>
     </div>
   );
