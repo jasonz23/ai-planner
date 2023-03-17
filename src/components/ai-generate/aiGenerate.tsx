@@ -11,7 +11,9 @@ import React, { useState } from "react";
 import { generateTasks } from "../../api/tasks";
 import { auth } from "../../pages/App";
 import { useAppDispatch, useAppSelector } from "../../slices";
-const AiGenerate = () => {
+import { addTask } from "../../slices/tasks";
+import LoadingIcon from "../loading-icon/loadingIcon";
+const AiGenerate = (props: any) => {
   const [time, setTime] = useState("");
   const TIMEPERIOD: any = {
     "": "1 Day",
@@ -72,8 +74,14 @@ const AiGenerate = () => {
       </div>
       <Button
         variant="contained"
-        style={{ margin: "10px", marginBottom: "20px" }}
+        style={{
+          margin: "10px",
+          marginBottom: "20px",
+          display: "flex",
+          justifyContent: "center",
+        }}
         onClick={() => {
+          props.setIsLoading(false);
           dispatch(
             generateTasks({
               wakeUp: (
@@ -84,6 +92,9 @@ const AiGenerate = () => {
               time: TIMEPERIOD[time],
               tasks: tasks,
               uid: auth.currentUser?.uid,
+              callBack: (a: boolean) => {
+                props.setIsLoading(a);
+              },
             })
           );
         }}
