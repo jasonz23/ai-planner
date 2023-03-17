@@ -28,6 +28,9 @@ const slice = createSlice({
                 state.tasks.push(payload);
             }
         },
+        addTaskUnique:(state, {payload}: PayloadAction<any>) => {
+            state.tasks.push(payload);
+        },
         deleteTask: (state, {payload}: PayloadAction<any>) => {
             state.tasks.forEach((task, index) => {
                 if (task.event_id === payload.event_id) {
@@ -38,6 +41,6 @@ const slice = createSlice({
     }
 })
 
-export const {setTasks, addTask, deleteTask} = slice.actions;
+export const {setTasks, addTask, deleteTask, addTaskUnique} = slice.actions;
 
 export const tasks = slice.reducer;
