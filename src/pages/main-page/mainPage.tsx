@@ -355,6 +355,9 @@ const MainPage = () => {
                   left: "30%",
                 }}
               >
+                <div style={{ marginBottom: "10px" }}>
+                  {auth.currentUser ? "" : "Please Sign In/ Up"}
+                </div>
                 <LoadingIcon />
               </div>
             </div>
