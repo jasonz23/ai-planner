@@ -6,7 +6,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import CalendarPage from "./calendar/calendar";
 import { getFirestore } from "firebase/firestore";
-
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 const firebaseConfig = {
   apiKey: "AIzaSyCT91Qc_y9wARXQBTFfWljMfGXlQyTzmU8",
 
@@ -29,17 +29,27 @@ export const auth = getAuth(app);
 
 export const db = getFirestore(app);
 
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#FFC0CB",
+    },
+  },
+});
+
 function App() {
   return (
     <>
-      <HashRouter>
-        <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route path="/tasks" element={<TasksPage />} />
-          <Route path="/calendar" element={<CalendarPage />} />
-          <Route path="/settings" element={<SettingsPage />} />
-        </Routes>
-      </HashRouter>
+      <ThemeProvider theme={theme}>
+        <HashRouter>
+          <Routes>
+            <Route path="/" element={<MainPage />} />
+            <Route path="/tasks" element={<TasksPage />} />
+            <Route path="/calendar" element={<CalendarPage />} />
+            <Route path="/settings" element={<SettingsPage />} />
+          </Routes>
+        </HashRouter>
+      </ThemeProvider>
     </>
   );
 }
