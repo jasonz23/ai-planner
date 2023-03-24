@@ -126,6 +126,7 @@ const AiGenerate = (props: any) => {
               uid: auth.currentUser?.uid,
               callBack: (a: boolean) => {
                 props.setIsLoading(a);
+                console.log(a);
               },
               studyLength:
                 parseInt(

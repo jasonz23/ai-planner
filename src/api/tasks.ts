@@ -2,7 +2,71 @@ import { AnyAction, ThunkAction } from "@reduxjs/toolkit";
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { db } from "../pages/App";
 import { RootState } from "../slices";
-import { addTaskUnique } from "../slices/tasks";
+import { addTaskUnique} from "../slices/tasks";
+
+export const generateTasks = ({events, wakeUp, sleep, studyLength = 40 * 60 * 1000, breakLength = 10 * 60 * 1000, time, uid, callBack}: any): ThunkAction<void, RootState, unknown, AnyAction> => async (dispatch) => {
+    // Create an array to store the generated events
+    const schedule: any[] = [];
+    const wakeUpTime = new Date(wakeUp);
+    const sleepTime= new Date(sleep);
+
+    // Helper function to check if a time slot is available for a new event
+    function isAvailable(start: any, end: any) {
+      for (let i = 0; i < events.length; i++) {
+        const event = events[i];
+        if ((start >= event.start && start < event.end) || (end > event.start && end <= event.end)) {
+          return false;
+        }
+      }
+      return true;
+    }
+  
+    // Helper function to create a new event and add it to the schedule
+    async function addEvent(title:string, start: any, end: any) {
+        const task = { title: title, start: start, end: end, uid: uid, event_id: Math.random(), doc_id: ""};
+        const docRef = await addDoc(collection(db, "events"), task)
+        task.doc_id = docRef.id;
+        updateDoc(doc(db, "events", docRef.id), task);
+        dispatch(addTaskUnique(task));
+        schedule.push(task);
+
+    }
+  
+    // Start generating events from wakeUpTime to sleepTime
+    let currentTime = wakeUpTime;
+
+    while (currentTime < sleepTime) {
+        // Check if there is enough time for a study event
+        const studyEndTime = new Date(currentTime.getTime() + studyLength);
+        if (studyEndTime <= sleepTime && isAvailable(currentTime, studyEndTime)) {
+            await addEvent('Study', currentTime, studyEndTime);
+            currentTime = new Date(studyEndTime.getTime()); // set current time to end of study
+        } else {
+            // Skip this time slot and move to the next one
+            currentTime = new Date(currentTime.getTime() + 1 * 60000); // move by 1 minute
+            continue;
+        }
+
+        // Check if there is enough time for a break event
+        const breakEndTime = new Date(currentTime.getTime() + breakLength);
+        if (breakEndTime <= sleepTime && isAvailable(currentTime, breakEndTime)) {
+            await addEvent('Break', studyEndTime, breakEndTime); // start break right after study
+            currentTime = new Date(breakEndTime.getTime()); // set current time to end of break
+        } else {
+            // Skip this time slot and move to the next one
+            currentTime = new Date(studyEndTime.getTime()); // start next study right after current study
+        }
+    }
+
+    callBack(true);
+  }
+
+export const getTasks = () => {};
+
+export const addTask = () => {};
+
+export const removeTask = () => {};
+
 
 // const { Configuration, OpenAIApi } = require("openai");
 
@@ -69,68 +133,3 @@ import { addTaskUnique } from "../slices/tasks";
 //     })
 //     //window.location.reload();
 // };
-
-export const generateTasks = ({events, wakeUp, sleep, studyLength = 40 * 60 * 1000, breakLength = 10 * 60 * 1000, time, uid}: any): ThunkAction<void, RootState, unknown, AnyAction> => async (dispatch) => {
-    // Create an array to store the generated events
-    const schedule: any[] = [];
-    const wakeUpTime = new Date(wakeUp);
-    const sleepTime= new Date(sleep);
-
-    console.log(wakeUpTime, sleepTime, wakeUpTime < sleepTime)
-
-    // Helper function to check if a time slot is available for a new event
-    function isAvailable(start: any, end: any) {
-      for (let i = 0; i < events.length; i++) {
-        const event = events[i];
-        if ((start >= event.start && start < event.end) || (end > event.start && end <= event.end)) {
-          return false;
-        }
-      }
-      return true;
-    }
-  
-    // Helper function to create a new event and add it to the schedule
-    async function addEvent(title:string, start: any, end: any) {
-        const task = { title: title, start: start, end: end, uid: uid, event_id: Math.random(), doc_id: ""};
-        const docRef = await addDoc(collection(db, "events"), task)
-        task.doc_id = docRef.id;
-        updateDoc(doc(db, "events", docRef.id), task);
-        dispatch(addTaskUnique(task));
-        schedule.push(task);
-
-    }
-  
-    // Start generating events from wakeUpTime to sleepTime
-    let currentTime = wakeUpTime;
-
-    while (currentTime < sleepTime) {
-        // Check if there is enough time for a study event
-        const studyEndTime = new Date(currentTime.getTime() + studyLength);
-        if (studyEndTime <= sleepTime && isAvailable(currentTime, studyEndTime)) {
-            await addEvent('Study', currentTime, studyEndTime);
-            currentTime = new Date(studyEndTime.getTime()); // set current time to end of study
-        } else {
-            // Skip this time slot and move to the next one
-            currentTime = new Date(currentTime.getTime() + 1 * 60000); // move by 1 minute
-            continue;
-        }
-
-        // Check if there is enough time for a break event
-        const breakEndTime = new Date(currentTime.getTime() + breakLength);
-        if (breakEndTime <= sleepTime && isAvailable(currentTime, breakEndTime)) {
-            await addEvent('Break', studyEndTime, breakEndTime); // start break right after study
-            currentTime = new Date(breakEndTime.getTime()); // set current time to end of break
-        } else {
-            // Skip this time slot and move to the next one
-            currentTime = new Date(studyEndTime.getTime()); // start next study right after current study
-        }
-    }
-
-    window.location.reload();
-  }
-
-export const getTasks = () => {};
-
-export const addTask = () => {};
-
-export const removeTask = () => {};
