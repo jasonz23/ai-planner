@@ -4,12 +4,12 @@ import { db } from "../pages/App";
 import { RootState } from "../slices";
 import { addTaskUnique } from "../slices/tasks";
 
-const { Configuration, OpenAIApi } = require("openai");
+// const { Configuration, OpenAIApi } = require("openai");
 
-const configuration = new Configuration({
-  apiKey: process.env.REACT_APP_OPEN_AI_API_KEY,
-});
-const openai = new OpenAIApi(configuration);
+// const configuration = new Configuration({
+//   apiKey: process.env.REACT_APP_OPEN_AI_API_KEY,
+// });
+// const openai = new OpenAIApi(configuration);
 
 // export const generateTasks = (info: any): ThunkAction<void, RootState, unknown, AnyAction> => async (dispatch) => {
 //     console.log("click");
