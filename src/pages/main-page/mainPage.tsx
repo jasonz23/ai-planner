@@ -134,7 +134,7 @@ const MainPage = () => {
                   // },
                 }}
                 month={{
-                  weekDays: [0, 1, 2, 3, 4, 5],
+                  weekDays: [0, 1, 2, 3, 4, 5, 6],
                   weekStartOn: 6,
                   startHour: 0,
                   endHour: 23,

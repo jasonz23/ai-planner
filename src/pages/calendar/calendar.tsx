@@ -15,7 +15,20 @@ const CalendarPage = () => {
           marginLeft: window.innerWidth <= minWidth ? "" : "88px",
         }}
       >
-        <Scheduler events={tasks} view="month" editable={false} />
+        <Scheduler
+          events={tasks}
+          view="month"
+          editable={false}
+          month={{
+            weekDays: [0, 1, 2, 3, 4, 5, 6],
+            weekStartOn: 6,
+            startHour: 0,
+            endHour: 23,
+            // cellRenderer: () => {
+            //   return <h1>month</h1>;
+            // },
+          }}
+        />
       </div>
     </div>
   );
