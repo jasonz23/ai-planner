@@ -37,10 +37,31 @@ const AiGenerate = (props: any) => {
         Generate Planner
       </div>
       <div style={{ margin: "10px", width: "80%" }}>
-        <TextField label="Wake Up Time" fullWidth id="wake-up-time" />
+        <TextField
+          label="Wake Up Time"
+          fullWidth
+          id="wake-up-time"
+          type="time"
+        />
       </div>
       <div style={{ margin: "10px", width: "80%" }}>
-        <TextField label="Sleep Time" fullWidth id="sleep-time" />
+        <TextField label="Sleep Time" fullWidth id="sleep-time" type="time" />
+      </div>
+      <div style={{ margin: "10px", width: "80%" }}>
+        <TextField
+          label="Study Length (minutes)"
+          fullWidth
+          id="study-time"
+          type="number"
+        />
+      </div>
+      <div style={{ margin: "10px", width: "80%" }}>
+        <TextField
+          label="Break Length (minutes)"
+          fullWidth
+          id="break-time"
+          type="number"
+        />
       </div>
 
       {/* TODO: <div style={{ margin: "10px" }}>Transport Time?</div> */}
@@ -82,19 +103,44 @@ const AiGenerate = (props: any) => {
         }}
         onClick={() => {
           props.setIsLoading(false);
+          const today = new Date();
+          const todayPST =
+            today
+              .toLocaleString("en-US", {
+                timeZone: "America/Los_Angeles",
+              })
+              .split(",")[0] + ", ";
+          console.log(todayPST);
           dispatch(
             generateTasks({
-              wakeUp: (
-                document.getElementById("wake-up-time") as HTMLInputElement
-              ).value,
-              sleep: (document.getElementById("sleep-time") as HTMLInputElement)
-                .value,
+              wakeUp:
+                todayPST +
+                (document.getElementById("wake-up-time") as HTMLInputElement)
+                  .value,
+              sleep:
+                todayPST +
+                (document.getElementById("sleep-time") as HTMLInputElement)
+                  .value,
               time: TIMEPERIOD[time],
-              tasks: tasks,
+              events: tasks,
               uid: auth.currentUser?.uid,
               callBack: (a: boolean) => {
                 props.setIsLoading(a);
               },
+              studyLength:
+                parseInt(
+                  (document.getElementById("study-time") as HTMLInputElement)
+                    .value
+                ) *
+                60 *
+                1000,
+              breakLength:
+                parseInt(
+                  (document.getElementById("break-time") as HTMLInputElement)
+                    .value
+                ) *
+                60 *
+                1000,
             })
           );
         }}
