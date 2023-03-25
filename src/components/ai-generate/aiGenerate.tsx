@@ -13,8 +13,6 @@ import React, { useState } from "react";
 import { generateTasks } from "../../api/tasks";
 import { auth } from "../../pages/App";
 import { useAppDispatch, useAppSelector } from "../../slices";
-import { addTask } from "../../slices/tasks";
-import LoadingIcon from "../loading-icon/loadingIcon";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const AiGenerate = (props: any) => {

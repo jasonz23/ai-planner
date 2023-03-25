@@ -353,7 +353,7 @@ const MainPage = () => {
                   position: "absolute",
                   zIndex: "1000",
                   top: "30%",
-                  left: "30%",
+                  left: "50%",
                 }}
               >
                 <div style={{ marginBottom: "10px" }}>

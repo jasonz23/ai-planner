@@ -24,9 +24,6 @@ const CalendarPage = () => {
             weekStartOn: 0,
             startHour: 0,
             endHour: 23,
-            // cellRenderer: () => {
-            //   return <h1>month</h1>;
-            // },
           }}
         />
       </div>
