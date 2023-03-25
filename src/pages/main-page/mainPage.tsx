@@ -17,6 +17,8 @@ import { deleteTask, setTasks } from "../../slices/tasks";
 import { addTask } from "../../slices/tasks";
 import { setUser } from "../../slices/user";
 import LoadingIcon from "../../components/loading-icon/loadingIcon";
+import "./main-page.css";
+
 const MainPage = () => {
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(true);
@@ -57,8 +59,7 @@ const MainPage = () => {
             marginTop: "70px",
             marginLeft: window.innerWidth <= minWidth ? "" : "88px",
             display: "flex",
-            flexDirection:
-              window.innerWidth >= minWidth ? "row" : "column-reverse",
+            flexDirection: "column-reverse",
             justifyContent: "center",
           }}
         >
@@ -366,7 +367,6 @@ const MainPage = () => {
             style={{
               flex: 1,
               height: "50vh",
-              marginTop: window.innerWidth >= minWidth ? "36px" : "",
               border: "##e0e0e0 1px solid",
             }}
           >
