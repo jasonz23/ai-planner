@@ -20,7 +20,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import "./nav-bar.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { minWidth } from "../../constants/dimensions";
 import { auth } from "../../pages/App";
 import {
@@ -45,6 +45,7 @@ const style = {
 };
 
 const NavBar = () => {
+  const location = useLocation();
   const CONTENTS = {
     link1: "Home",
     link2: "Tasks",
@@ -137,7 +138,7 @@ const NavBar = () => {
             style={
               window.innerWidth <= minWidth
                 ? { fontSize: "15px" }
-                : { marginLeft: "auto" }
+                : { marginLeft: "100px" }
             }
           >
             Planner
@@ -231,6 +232,7 @@ const NavBar = () => {
                 onClick={() => {
                   navigate(NAVIGATE["link1"]);
                 }}
+                selected={location.pathname === "/"}
               >
                 <ListItemIcon className="icon-box">
                   <HomeIcon style={{ fontSize: "35px" }} />
@@ -241,6 +243,7 @@ const NavBar = () => {
                 onClick={() => {
                   navigate(NAVIGATE["link2"]);
                 }}
+                selected={location.pathname === "/tasks"}
               >
                 <ListItemIcon className="icon-box">
                   <ListAltIcon style={{ fontSize: "35px" }} />
@@ -251,6 +254,7 @@ const NavBar = () => {
                 onClick={() => {
                   navigate(NAVIGATE["link3"]);
                 }}
+                selected={location.pathname === "/calendar"}
               >
                 <ListItemIcon className="icon-box">
                   <CalendarMonthIcon style={{ fontSize: "35px" }} />
@@ -263,6 +267,7 @@ const NavBar = () => {
                 onClick={() => {
                   navigate(NAVIGATE["link4"]);
                 }}
+                selected={location.pathname === "/"}
               >
                 <ListItemIcon className="icon-box">
                   <SettingsIcon style={{ fontSize: "35px" }} />
@@ -314,6 +319,7 @@ const NavBar = () => {
               onClick={() => {
                 navigate(NAVIGATE["link1"]);
               }}
+              selected={location.pathname === "/"}
             >
               <ListItemIcon className="icon-box">
                 <HomeIcon style={{ fontSize: "35px" }} />
@@ -325,6 +331,7 @@ const NavBar = () => {
               onClick={() => {
                 navigate(NAVIGATE["link2"]);
               }}
+              selected={location.pathname === "/tasks"}
             >
               <ListItemIcon className="icon-box">
                 <ListAltIcon style={{ fontSize: "35px" }} />
@@ -336,6 +343,7 @@ const NavBar = () => {
               onClick={() => {
                 navigate(NAVIGATE["link3"]);
               }}
+              selected={location.pathname === "/calendar"}
             >
               <ListItemIcon className="icon-box">
                 <CalendarMonthIcon style={{ fontSize: "35px" }} />
@@ -349,6 +357,7 @@ const NavBar = () => {
               onClick={() => {
                 navigate(NAVIGATE["link4"]);
               }}
+              selected={location.pathname === "/settings"}
             >
               <ListItemIcon className="icon-box">
                 <SettingsIcon style={{ fontSize: "35px" }} />
