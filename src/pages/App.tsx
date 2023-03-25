@@ -32,7 +32,8 @@ export const db = getFirestore(app);
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#FFC0CB",
+      main: "#ffa6b5",
+      light: "#ffa6b5",
     },
   },
 });
