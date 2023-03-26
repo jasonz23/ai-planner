@@ -19,7 +19,6 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import SettingsIcon from "@mui/icons-material/Settings";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
-import "./nav-bar.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import { minWidth } from "../../constants/dimensions";
 import { auth } from "../../pages/App";
@@ -32,6 +31,8 @@ import { useAppDispatch } from "../../slices";
 import { setUser } from "../../slices/user";
 import { setTasks } from "../../slices/tasks";
 import { CONTENTS, NAVIGATE } from "../../constants/routes";
+import "./nav-bar.css";
+import { toast } from "react-toastify";
 
 const style = {
   position: "absolute" as "absolute",
@@ -55,11 +56,15 @@ const NavBar = () => {
   const [showModal, setShowModal] = useState({ show: false, option: 0 });
 
   const signOut = () => {
-    signOutFireBase(auth).then(() => {
-      console.log("sign out");
-      dispatch(setTasks([]));
-      dispatch(setUser({}));
-    });
+    signOutFireBase(auth)
+      .then(() => {
+        dispatch(setTasks([]));
+        dispatch(setUser({}));
+        toast.success("Signed Out");
+      })
+      .catch(() => {
+        toast.error("Failed to Sign Out. Please Retry.");
+      });
   };
   const signIn = async () => {
     const email = (document.getElementById("email") as HTMLInputElement).value;
@@ -71,7 +76,9 @@ const NavBar = () => {
         dispatch(setUser(userCredential));
         window.location.reload();
       })
-      .catch();
+      .catch(() => {
+        toast.error("Failed to Sign In. Please Retry.");
+      });
   };
   const signUp = async () => {
     const email = (document.getElementById("email") as HTMLInputElement).value;
@@ -83,7 +90,9 @@ const NavBar = () => {
         dispatch(setUser(userCredential));
         window.location.reload();
       })
-      .catch();
+      .catch(() => {
+        toast.error("Failed to Sign Up. Please Retry.");
+      });
   };
 
   return (
