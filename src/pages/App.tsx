@@ -7,6 +7,10 @@ import { getAuth } from "firebase/auth";
 import CalendarPage from "./calendar/calendar";
 import { getFirestore } from "firebase/firestore";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import "react-toastify/dist/ReactToastify.css";
+import "./global.css";
+import { ToastContainer } from "react-toastify";
+
 const firebaseConfig = {
   apiKey: "AIzaSyCT91Qc_y9wARXQBTFfWljMfGXlQyTzmU8",
 
@@ -50,6 +54,7 @@ function App() {
             <Route path="/settings" element={<SettingsPage />} />
           </Routes>
         </HashRouter>
+        <ToastContainer position="bottom-right" />
       </ThemeProvider>
     </>
   );
