@@ -2,5 +2,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.MuiListItemButton-root {
+    background-color: black;
     
 }
+
+.Mui-selected {
+    background-color: rgba(255, 166, 181, .25) !important;
+}
+
