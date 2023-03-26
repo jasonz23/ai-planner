@@ -6,7 +6,6 @@ import { useAppSelector } from "../../slices";
 import { filterObjectsByEndTime } from "../../utils/helpers";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../App";
-import { ToastContainer } from "react-toastify";
 
 const TasksPage = () => {
   const tasks = useAppSelector((state) => state?.tasks?.tasks);

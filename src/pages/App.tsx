@@ -40,6 +40,7 @@ const theme = createTheme({
       light: "#ffa6b5",
     },
   },
+  typography: { fontFamily: ["main"].join(",") },
 });
 
 function App() {
