@@ -1,0 +1,12 @@
+@font-face {
+    font-family: main;
+    src: url(../fonts/Mulish-VariableFont_wght.ttf);
+}
+
+div {
+    font-family: main;
+}
+
+html {
+    font-family: main;
+}
