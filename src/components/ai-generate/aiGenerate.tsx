@@ -66,7 +66,7 @@ const AiGenerate = (props: any) => {
         >
           <div style={{ margin: "10px", width: "90%" }}>
             <TextField
-              label="Wake Up Time"
+              label="Start Time"
               fullWidth
               id="wake-up-time"
               type="time"
@@ -74,7 +74,7 @@ const AiGenerate = (props: any) => {
           </div>
           <div style={{ margin: "10px", width: "90%" }}>
             <TextField
-              label="Sleep Time"
+              label="Finish Time"
               fullWidth
               id="sleep-time"
               type="time"
