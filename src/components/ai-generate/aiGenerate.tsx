@@ -42,6 +42,9 @@ const AiGenerate = (props: any) => {
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
           id="panel1a-header"
+          style={{
+            paddingRight: "10px",
+          }}
         >
           <div
             style={{

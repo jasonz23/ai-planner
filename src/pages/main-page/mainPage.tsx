@@ -15,7 +15,6 @@ import {
 import { useAppDispatch, useAppSelector } from "../../slices";
 import { deleteTask, setTasks } from "../../slices/tasks";
 import { addTask } from "../../slices/tasks";
-import { setUser } from "../../slices/user";
 import LoadingIcon from "../../components/loading-icon/loadingIcon";
 import "./main-page.css";
 
@@ -64,8 +63,8 @@ const MainPage = () => {
           }}
         >
           {(auth.currentUser ||
-            Object.keys(user).length != 0 ||
-            tasks.length != 0) &&
+            Object.keys(user).length !== 0 ||
+            tasks.length !== 0) &&
           isLoading ? (
             <div style={{ flex: 3 }}>
               <Scheduler
